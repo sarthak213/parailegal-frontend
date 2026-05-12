@@ -1,73 +1,89 @@
-# React + TypeScript + Vite
+# ParAILegal — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The frontend for [ParAILegal](https://github.com/sarthak213/ParAILegal), an AI-powered Indian legal research tool. Built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+ParAILegal lets lawyers, law students, and researchers ask questions about Indian law and get grounded, cited answers in real time. Every answer traces directly to primary sources — the Constitution of India, the BNS 2023, BNSS 2023, BSA 2023, and landmark Supreme Court judgements.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Streaming answers** — responses stream token by token via Server-Sent Events
+- **Inline citations** — every `[Article 21]` or `[Section 103, BNS]` tag is clickable and highlights the source
+- **Sources sidebar** — retrieved legal chunks ranked by relevance, with expand and copy-citation actions
+- **Three research modes** — Research, Advocate (counter-argument), Summarise (plain language)
+- **Domain filtering** — search All, Constitution, Statutes, or Judgements
+- **Session history** — past queries persist in localStorage, resumable with one click
+- **Export to PDF** — print a clean formatted research report
+- **Copy citation** — one-click legal citation formatting
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 18 + TypeScript
+- Vite
+- Lucide React (icons)
+- CSS custom properties (no UI framework)
+- Fonts: Cormorant Garamond, Instrument Sans, DM Mono
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+```bash
+# Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The app runs at `http://localhost:5173` and connects to the FastAPI backend at `http://localhost:8000` by default.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Backend
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The backend repo is at [github.com/sarthak213/ParAILegal](https://github.com/sarthak213/ParAILegal). It must be running locally for the frontend to work. Start it with:
+
+```bash
+uvicorn app.main:app --reload
 ```
+
+## Configuration
+
+Create a `.env.local` file in the project root:
+
+```env
+# Local development
+VITE_API_BASE_URL=http://localhost:8000
+
+# Production (Oracle Cloud VM)
+# VITE_API_BASE_URL=http://YOUR_SERVER_IP
+```
+
+## Building for production
+
+```bash
+npm run build
+```
+
+Output goes to `dist/`. Deploy to GitHub Pages or any static host.
+
+## Project structure
+
+```
+src/
+├── components/
+│   ├── answer/       # AnswerView with streaming and citation rendering
+│   ├── layout/       # Sidebar with history
+│   ├── query/        # QueryInput with mode and domain controls
+│   └── sources/      # SourceCard and SourcesPanel
+├── hooks/
+│   ├── useStream.ts  # SSE streaming logic
+│   ├── useHistory.ts # localStorage CRUD
+│   └── useBackend.ts # API health check
+├── types/            # TypeScript interfaces
+└── utils/
+    ├── citations.ts  # Legal citation formatting and parsing
+    └── export.ts     # PDF export and clipboard utilities
+```
+
+## License
+
+GNU Affero General Public License v3.0 — see the backend repo for full license terms.
