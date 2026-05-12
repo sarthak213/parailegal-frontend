@@ -61,7 +61,12 @@ export default function App() {
   const handleSubmit = useCallback(() => {
     if (!query.trim() || isStreaming) return
 
-    // Switch to live mode and immediately clear all previous content
+    // Reset stream state first — clears previous sources from the hook
+    // This is critical when submitting from a history view, where
+    // liveMode becomes true but stream.sources still holds old data
+    reset()
+
+    // Switch to live mode and immediately clear all display state
     setActiveHistoryId(null)
     setDisplayQuery(query)
     setDisplayAnswer('')
@@ -70,11 +75,10 @@ export default function App() {
     setHighlightedSource(null)
 
     stream(query, mode, domain, (finalAnswer, finalSources, finalDomain) => {
-      // Save to history when done
       addEntry(query, query, finalAnswer, finalSources, finalDomain, mode)
       setQuery('')
     })
-  }, [query, mode, domain, isStreaming, stream, addEntry])
+  }, [query, mode, domain, isStreaming, stream, reset, addEntry])
 
   // ── Load history entry ────────────────────────────────────────────
   const handleSelectHistory = useCallback((entry: HistoryEntry) => {
@@ -180,15 +184,15 @@ export default function App() {
             )}
           </div>
 
-          {/* Sources panel toggle FAB */}
-          {shownSources.length > 0 && (
+          {/* Sources panel toggle FAB — always visible when collapsed, or when sources exist */}
+          {(sourcesCollapsed || shownSources.length > 0) && (
             <button
               className={`sources-toggle-fab${sourcesCollapsed ? ' sources-toggle-fab--collapsed' : ''}`}
               onClick={() => setSourcesCollapsed(v => !v)}
               title={sourcesCollapsed ? 'Show sources' : 'Hide sources'}
             >
               {sourcesCollapsed
-                ? <><ChevronLeft size={12} /> Sources ({shownSources.length})</>
+                ? <><ChevronLeft size={12} /> Sources {shownSources.length > 0 ? `(${shownSources.length})` : ''}</>
                 : <><ChevronRight size={12} /> Hide</>
               }
             </button>
