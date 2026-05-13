@@ -37,7 +37,7 @@
 
   /* ── Sidebar ── */
   --sidebar-w:    280px;
-  --sidebar-bg:   #f2ebe3;
+  --sidebar-bg:   var(--paper-2);
   --sidebar-text: var(--ink-1);
   --sidebar-muted:var(--ink-3);
 
@@ -93,12 +93,9 @@ body {
 }
 
 .sidebar__header {
-  padding: 4px 4px 4px;
-  border-bottom: 1px solid var(--border-dark);
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .sidebar__logo {
@@ -882,4 +879,36 @@ body {
   color: var(--text-faint);
   margin-top: 8px;
   text-align: right;
+}
+
+/* ── Searching skeleton state ── */
+.answer-searching {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.answer-searching__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-family: var(--font-sans);
+}
+
+.answer-searching__dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.answer-searching__skeletons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
