@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { Sidebar } from './components/layout/Sidebar'
 import { QueryInput } from './components/query/QueryInput'
@@ -184,17 +183,13 @@ export default function App() {
             )}
           </div>
 
-          {/* Sources panel toggle FAB — always visible when collapsed, or when sources exist */}
-          {(sourcesCollapsed || shownSources.length > 0) && (
+          {/* Show sources button — top right corner when panel is collapsed */}
+          {sourcesCollapsed && shownSources.length > 0 && (
             <button
-              className={`sources-toggle-fab${sourcesCollapsed ? ' sources-toggle-fab--collapsed' : ''}`}
-              onClick={() => setSourcesCollapsed(v => !v)}
-              title={sourcesCollapsed ? 'Show sources' : 'Hide sources'}
+              className="show-sources-btn"
+              onClick={() => setSourcesCollapsed(false)}
             >
-              {sourcesCollapsed
-                ? <><ChevronLeft size={12} /> Sources {shownSources.length > 0 ? `(${shownSources.length})` : ''}</>
-                : <><ChevronRight size={12} /> Hide</>
-              }
+              Show sources ({shownSources.length})
             </button>
           )}
 

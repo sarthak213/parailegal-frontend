@@ -67,7 +67,7 @@ Output goes to `dist/`. Deploy to GitHub Pages or any static host.
 
 ## Project structure
 
-```
+```text
 src/
 ├── components/
 │   ├── answer/       # AnswerView with streaming and citation rendering
